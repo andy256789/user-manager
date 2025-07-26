@@ -2,5 +2,12 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./apps/manager-backend-e2e"
+    },
+    {
+      "path": "./apps/manager-backend"
+    }
+  ]
 }
