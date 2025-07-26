@@ -4,7 +4,54 @@
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+A modern user management system built with **NestJS**, **Nx**, and **Docker**.
+
+## 🚀 Quick Start
+
+### With Docker (Recommended)
+
+```bash
+# Build and run with Docker
+npm run docker:build
+npm run docker:run
+
+# Or use Docker Compose with database
+npm run docker:up
+```
+
+The application will be available at http://localhost:3000
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build the backend
+npx nx build manager-backend
+
+# Serve the backend
+npx nx serve manager-backend
+```
+
+## 🐳 Docker Support
+
+This project includes full Docker support with:
+
+- Multi-stage Docker builds for optimized production images
+- Docker Compose setup with PostgreSQL database
+- Helper scripts for common Docker operations
+
+For detailed Docker instructions, see [DOCKER.md](./DOCKER.md)
+
+## 📁 Project Structure
+
+```
+apps/
+├── manager-backend/          # NestJS API application
+└── manager-backend-e2e/      # E2E tests for backend
+packages/                     # Shared libraries (future)
+```
 
 ## Generate a library
 
@@ -97,12 +144,13 @@ Nx Console is an editor extension that enriches your developer experience. It le
 
 Learn more:
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
+- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
 And join the Nx community:
+
 - [Discord](https://go.nx.dev/community)
 - [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)

@@ -2,12 +2,19 @@
   "name": "@user-manager/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "docker:build": "npx nx build manager-backend && docker build -t user-manager-backend -f apps/manager-backend/Dockerfile .",
+    "docker:run": "docker run -p 3000:3000 --env NODE_ENV=development user-manager-backend",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f manager-backend"
+  },
   "private": true,
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
+    "@nx-tools/nx-container": "^6.8.0",
     "@nx/eslint": "21.3.7",
     "@nx/eslint-plugin": "21.3.7",
     "@nx/jest": "21.3.7",
