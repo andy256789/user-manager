@@ -13,3 +13,89 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User model for authentication and authorization
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationship to person (if user is an employee)
+  person   Person? @relation(fields: [personId], references: [id])
+  personId String? @unique
+
+  @@map("users")
+}
+
+// Department model
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  people   Person[]
+  managers Person[] @relation("DepartmentManager")
+
+  @@map("departments")
+}
+
+// Person model - core entity for HR management
+model Person {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  position  String
+  salary    Decimal  @db.Decimal(10, 2)
+  hireDate  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Department relationship
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+
+  // Manager relationship (self-referencing)
+  manager   Person?  @relation("PersonManager", fields: [managerId], references: [id])
+  managerId String?
+  reports   Person[] @relation("PersonManager")
+
+  // Managed departments (for managers)
+  managedDepartments Department[] @relation("DepartmentManager")
+
+  // User account relationship
+  user User?
+
+  // Salary history
+  salaryHistory SalaryHistory[]
+
+  @@map("people")
+}
+
+// Salary history for tracking salary changes
+model SalaryHistory {
+  id            String   @id @default(cuid())
+  salary        Decimal  @db.Decimal(10, 2)
+  effectiveDate DateTime
+  reason        String?
+  createdAt     DateTime @default(now())
+
+  // Person relationship
+  person   Person @relation(fields: [personId], references: [id])
+  personId String
+
+  @@map("salary_history")
+}
+
+// Enum for user roles
+enum UserRole {
+  EMPLOYEE
+  MANAGER
+  HR_ADMIN
+}

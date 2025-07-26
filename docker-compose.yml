@@ -1,30 +1,47 @@
 version: '3.8'
 
 services:
-  manager-backend:
-    build:
-      context: .
-      dockerfile: apps/manager-backend/Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-    volumes:
-      - ./apps/manager-backend/prisma:/usr/src/app/prisma
-    depends_on:
-      - postgres
-    
   postgres:
     image: postgres:15-alpine
+    container_name: user-manager-postgres
     environment:
+      POSTGRES_DB: user_manager
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: user_manager
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - user-manager-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  manager-backend:
+    build:
+      context: .
+      dockerfile: apps/manager-backend/Dockerfile
+    container_name: user-manager-backend
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/user_manager?schema=public"
+      JWT_SECRET: "your-super-secret-jwt-key-change-in-production"
+      JWT_EXPIRES_IN: "24h"
+      NODE_ENV: "development"
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - user-manager-network
 
 volumes:
   postgres_data:
+
+networks:
+  user-manager-network:
+    driver: bridge
